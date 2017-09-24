@@ -30,7 +30,7 @@ namespace SteamBot
                     while (!gamesListResult.IsSuccessStatusCode)
                     {
                         Thread.Sleep(i * 1000);
-                        Console.WriteLine(Convert.ToString(i * 100) + "ms");
+                        Console.WriteLine(Convert.ToString(i * 1000) + "ms");
                         gamesListResult = await client.GetAsync(queryString2);
                         i++;
                     }
