@@ -6,7 +6,7 @@ Part 1: Scraper - In progress
     Current issue - IP blocked after a certain amount of requests, block goes away after a seemingly random amount of time (2-4 minutes)
         solutions?
             After first 429 status code received, while loop and try again until it gets a successful hit
-            Proxy IP switch - When 429 status received, switch IP address. Assuming it is being IP blocked, could be machine blocked as well..
+            Proxy IP switch - When 429 status received, switch IP address. Assuming it is being IP blocked, could be machine blocked as well
                 Not really the moral way to solve the problem, if this is the only solution probably abandon project..
 
 Part 2: Data store
