@@ -26,13 +26,11 @@ namespace SteamBot
                 {
                     string queryString2 = String.Format("http://store.steampowered.com/api/appdetails/?appids={0}", apps.appid);
                     var gamesListResult = await client.GetAsync(queryString2);
-                    int i = 1;
                     while (!gamesListResult.IsSuccessStatusCode)
                     {
-                        Thread.Sleep(i * 1000);
-                        Console.WriteLine(Convert.ToString(i * 1000) + "ms");
+                        Thread.Sleep(180000);
+                        Console.WriteLine("Slept for 180 seconds");
                         gamesListResult = await client.GetAsync(queryString2);
-                        i++;
                     }
                     var GameListResultString = await gamesListResult.Content.ReadAsStringAsync();
                     //Console.WriteLine(GameListResultString);
