@@ -14,6 +14,8 @@ namespace SteamBot
     {
         static void Main(string[] args)
         {
+            List<string> badGamesList = new List<string>();
+
             var gamesResponse = new Games();
             Task.Run(async () =>
             {
@@ -22,33 +24,38 @@ namespace SteamBot
                 var gamesResult = await client.GetAsync(queryString);
                 gamesResponse = JsonConvert.DeserializeObject<Games>(await gamesResult.Content.ReadAsStringAsync());
 
+                int iterator = 0;
                 foreach (Apps apps in gamesResponse.applist.apps)
                 {
                     string queryString2 = String.Format("http://store.steampowered.com/api/appdetails/?appids={0}", apps.appid);
                     var gamesListResult = await client.GetAsync(queryString2);
+                    if (!gamesListResult.IsSuccessStatusCode)
+                    {
+                        iterator++;
+                    }
+
                     while (!gamesListResult.IsSuccessStatusCode)
                     {
-                        Thread.Sleep(180000);
-                        Console.WriteLine("Slept for 180 seconds");
+                        Thread.Sleep(10000);
+                        Console.WriteLine("Slept for 10 seconds");
                         gamesListResult = await client.GetAsync(queryString2);
                     }
+
                     var GameListResultString = await gamesListResult.Content.ReadAsStringAsync();
-                    //Console.WriteLine(GameListResultString);
                     var gamesListResponse = (JObject)JsonConvert.DeserializeObject(GameListResultString);
+
                     try { 
                         Console.WriteLine(gamesListResponse[apps.appid]["data"]["name"]);
                     }
                     catch
                     {
-
+                        badGamesList.Add(apps.appid.ToString());
                     }
-                    //Thread.Sleep(1000);
+                    Thread.Sleep(1500);
                 }
             }).GetAwaiter().GetResult();
-            foreach (Apps apps in gamesResponse.applist.apps)
-            {
-                Console.WriteLine(apps.appid);
-            }
+
+
             Console.ReadLine();
         }
     }
